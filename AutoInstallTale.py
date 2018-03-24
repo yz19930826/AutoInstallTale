@@ -235,11 +235,13 @@ if __name__ == '__main__':
     taleFolderName = unzip_file(SOFTWARE_PATH+taleName,TALE_HOME)
     os.chdir(TALE_HOME+taleFolderName)
     os.chmod('tale-cli',stat.S_IRWXU)
-
+    print '将tale的端口配置为80'
+    if not isContentInFile('resources/app.properties'):
+        editFileContent('resources/app.properties','server.port=80')
     result = execShell("./tale-cli start")
-    if result:
-        for res in result:
-            print res
+    # if result:
+    #     for res in result:
+    #         print res
 
 
     #配置防火墙
