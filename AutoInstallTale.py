@@ -226,6 +226,7 @@ if __name__ == '__main__':
         # 拼接环境变量
         env = JAVA_HOME + folderName
         editFileContent('/etc/profile', CONTENTSCHANGE + env + '\n' + CONTENTS)
+    execShell('source /etc/profile')
     # 下载tale.zip
     downFileProcess(TALE_URL,SOFTWARE_PATH)
     #获取下载的文件名
@@ -234,6 +235,7 @@ if __name__ == '__main__':
     taleFolderName = unzip_file(SOFTWARE_PATH+taleName,TALE_HOME)
     os.chdir(TALE_HOME+taleFolderName)
     os.chmod('tale-cli',stat.S_IRWXU)
+
     result = execShell("./tale-cli start")
     if result:
         for res in result:
