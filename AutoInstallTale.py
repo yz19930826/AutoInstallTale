@@ -3,7 +3,7 @@ import os
 import urllib
 import urllib2
 import tarfile
-import sys
+import sys,stat
 import math
 import zipfile
 
@@ -233,13 +233,18 @@ if __name__ == '__main__':
     #解压tale.zip
     taleFolderName = unzip_file(SOFTWARE_PATH+taleName,TALE_HOME)
     os.chdir(TALE_HOME+taleFolderName)
+    os.chmod('tale-cli',stat.S_IRWXU)
     result = execShell("./tale-cli start")
-    for res in result:
-        print res
+    if result:
+        for res in result:
+            print res
+
 
     #配置防火墙
+    print '配置防火墙'
     execShell('systemctl stop firewalld.service')
 
+    print '搭建完成~'
 
     # foldername = tarD('jdk-8u151-linux-x64.tar.gz', getPwd())
     # print foldername
