@@ -80,7 +80,10 @@ def mkdir(path):
 def downFileProcess(url, filepath):
     # 判断文件是否存在
     filename = getFilename(url)
-    fileLocation = filepath + "\\" + filename
+    #若文件夹不存在
+    if os.path.exists(filepath):
+        os.makedirs(filepath)
+    fileLocation = filepath + filename
     fileExist = os.path.isfile(fileLocation)
     if fileExist:
         print filename + '下载完毕！'
