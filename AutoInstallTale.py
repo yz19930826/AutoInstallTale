@@ -81,7 +81,7 @@ def downFileProcess(url, filepath):
     # 判断文件是否存在
     filename = getFilename(url)
     #若文件夹不存在
-    if os.path.exists(filepath):
+    if not os.path.exists(filepath):
         os.makedirs(filepath)
     fileLocation = filepath + filename
     fileExist = os.path.isfile(fileLocation)
