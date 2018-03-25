@@ -12,6 +12,7 @@ chmod 777 tale.py
 python tale.py
 ```
 静静等待两分钟，等到下面的结果说明搭建成功:
+
 ![](http://p1hy9syru.bkt.clouddn.com/18-3-25/4149798.jpg)
 
 接着访问服务器的IP地址，如我的是:140.82.31.133,得到下面的结果：
