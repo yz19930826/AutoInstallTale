@@ -130,14 +130,17 @@ def tarD(filepath, path):
     print '正在解压' + filepath + "文件，请耐心等待..."
     tar = tarfile.open(filepath)
     names = tar.getnames()
-    folderName = ''
-    i = 1;
-    for name in names:
-        print name
-        tar.extract(name, path=path)
-        # tar.close()
-    print '解压' + filepath + "完成，关闭流~";
-    tar.close()
+    if os.path.exists(filepath+names[0]):
+        print '文件已解压...'
+    else:
+        folderName = ''
+        i = 1;
+        for name in names:
+            print name
+            tar.extract(name, path=path)
+            # tar.close()
+        print '解压' + filepath + "完成，关闭流~";
+        tar.close()
     return names[0]
 
 
