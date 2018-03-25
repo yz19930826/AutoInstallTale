@@ -233,14 +233,14 @@ if __name__ == '__main__':
     # 解压JDK(注意文件被占用的问题)
     folderName = tarD(SOFTWARE_PATH + JdkTarFile, JAVA_HOME)
     # 配置全局环境变量
-    env = ''
     if not isContentInFile('/etc/profile', CONTENTS):
         # 拼接环境变量
         env = JAVA_HOME + folderName
+        ENV_JAVA_HOME = env
         editFileContent('/etc/profile', CONTENTS_CHANGE + env + '\n' + CONTENTS)
 
     #配置当前进程环境变量
-    configPath('JAVA_HOME',env)
+    configPath('JAVA_HOME',ENV_JAVA_HOME)
     configPath('JRE_HOME',ENV_JRE_HOME)
     configPath('CLASSPATH',ENV_CLASSPATH)
     configPath('PATH',ENV_PATH)
@@ -260,9 +260,6 @@ if __name__ == '__main__':
     if not isContentInFile('resources/app.properties','server.port=80'):
         editFileContent('resources/app.properties','server.port=80')
     result = execShell("./tale-cli start")
-
-
-
 
     #配置防火墙
     print '配置防火墙'
