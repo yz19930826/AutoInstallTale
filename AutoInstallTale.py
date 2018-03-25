@@ -30,9 +30,9 @@ export PATH=${JAVA_HOME}/bin:$PATH
 
 #环境变量
 ENV_JAVA_HOME = ''
-ENV_JRE_HOME = '${JAVA_HOME}/jre'
-ENV_CLASSPATH='.:${JAVA_HOME}/lib:${JRE_HOME}/lib'
-ENV_PATH = '${JAVA_HOME}/bin:$PATH'
+ENV_JRE_HOME = '''${JAVA_HOME}/jre'''
+ENV_CLASSPATH='''.:${JAVA_HOME}/lib:${JRE_HOME}/lib'''
+ENV_PATH = '''${JAVA_HOME}/bin:$PATH'''
 
 
 
