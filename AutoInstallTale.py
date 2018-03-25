@@ -11,7 +11,7 @@ import zipfile
 JDK_URL = 'http://p1hy9syru.bkt.clouddn.com/jdk-8u151-linux-x64.tar.gz'
 # JAVA_Home地址
 JAVA_HOME = '/usr/local/java/'
-#T TALE_HOME
+# TALE_HOME
 TALE_HOME = '/usr/local/tale/'
 # tale下载路径
 TALE_URL = 'http://static.biezhi.me/tale-least.zip'
@@ -20,12 +20,21 @@ TALE_URL = 'http://static.biezhi.me/tale-least.zip'
 SOFTWARE_PATH = "/usr/local/software/"
 
 # profile内容
-CONTENTSCHANGE = ''' export JAVA_HOME='''
+CONTENTS_CHANGE = ''' export JAVA_HOME='''
+#profile全局环境变量
 CONTENTS = '''
-        export JRE_HOME=${JAVA_HOME}/jre
-        export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
-        export PATH=${JAVA_HOME}/bin:$PATH
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
 '''
+
+#环境变量
+ENV_JAVA_HOME = ''
+ENV_JRE_HOME = '${JAVA_HOME}/jre'
+ENV_CLASSPATH='.:${JAVA_HOME}/lib:${JRE_HOME}/lib'
+ENV_PATH = '${JAVA_HOME}/bin:$PATH'
+
+
 
 
 # 获取当前路径
@@ -201,8 +210,10 @@ def isContentInFile(filepath, content):
 # 执行shell命令
 def execShell(cmd):
     result = os.popen(cmd)
-    print result.readlines()
+    return result.read()
 
+def configPath(key,value):
+    os.environ[key] = value
 
 # 启动程序
 def start(processpath):
@@ -219,14 +230,24 @@ if __name__ == '__main__':
     downFileProcess(JDK_URL, SOFTWARE_PATH);
     # 根据URL获取文件名
     JdkTarFile = getFilename(JDK_URL)
-    # 解压JDK
+    # 解压JDK(注意文件被占用的问题)
     folderName = tarD(SOFTWARE_PATH + JdkTarFile, JAVA_HOME)
-    # 配置环境变量
+    # 配置全局环境变量
+    env = ''
     if not isContentInFile('/etc/profile', CONTENTS):
         # 拼接环境变量
         env = JAVA_HOME + folderName
-        editFileContent('/etc/profile', CONTENTSCHANGE + env + '\n' + CONTENTS)
-    execShell('source /etc/profile')
+        editFileContent('/etc/profile', CONTENTS_CHANGE + env + '\n' + CONTENTS)
+
+    #配置当前进程环境变量
+    configPath('JAVA_HOME',env)
+    configPath('JRE_HOME',ENV_JRE_HOME)
+    configPath('CLASSPATH',ENV_CLASSPATH)
+    configPath('PATH',ENV_PATH)
+
+
+    # tale 的下载和安装
+
     # 下载tale.zip
     downFileProcess(TALE_URL,SOFTWARE_PATH)
     #获取下载的文件名
@@ -239,14 +260,14 @@ if __name__ == '__main__':
     if not isContentInFile('resources/app.properties','server.port=80'):
         editFileContent('resources/app.properties','server.port=80')
     result = execShell("./tale-cli start")
-    # if result:
-    #     for res in result:
-    #         print res
+
+
 
 
     #配置防火墙
     print '配置防火墙'
     execShell('systemctl stop firewalld.service')
+
 
     print '搭建完成~'
 
