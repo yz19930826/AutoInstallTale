@@ -3,9 +3,12 @@ import os
 import urllib
 import urllib2
 import tarfile
-import sys,stat
+import sys, stat
 import math
 import zipfile
+import socket
+import fcntl
+import struct
 
 # JDK下载路径
 JDK_URL = 'http://p1hy9syru.bkt.clouddn.com/jdk-8u151-linux-x64.tar.gz'
@@ -21,20 +24,18 @@ SOFTWARE_PATH = "/usr/local/software/"
 
 # profile内容
 CONTENTS_CHANGE = ''' export JAVA_HOME='''
-#profile全局环境变量
+# profile全局环境变量
 CONTENTS = '''
 export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 export PATH=${JAVA_HOME}/bin:$PATH
 '''
 
-#环境变量
+# 环境变量
 ENV_JAVA_HOME = ''
 ENV_JRE_HOME = '"${JAVA_HOME}/jre"'
-ENV_CLASSPATH='".:${JAVA_HOME}/lib:${JRE_HOME}/lib"'
+ENV_CLASSPATH = '".:${JAVA_HOME}/lib:${JRE_HOME}/lib"'
 ENV_PATH = '"${JAVA_HOME}/bin:$PATH"'
-
-
 
 
 # 获取当前路径
@@ -89,7 +90,7 @@ def mkdir(path):
 def downFileProcess(url, filepath):
     # 判断文件是否存在
     filename = getFilename(url)
-    #若文件夹不存在
+    # 若文件夹不存在
     if not os.path.exists(filepath):
         os.makedirs(filepath)
     fileLocation = filepath + filename
@@ -130,7 +131,7 @@ def tarD(filepath, path):
     print '正在解压' + filepath + "文件，请耐心等待..."
     tar = tarfile.open(filepath)
     names = tar.getnames()
-    if os.path.exists(filepath+names[0]):
+    if os.path.exists(filepath + names[0]):
         print '文件已解压...'
     else:
         folderName = ''
@@ -215,14 +216,26 @@ def execShell(cmd):
     result = os.popen(cmd)
     return result.read()
 
-def configPath(key,value):
+
+def configPath(key, value):
     os.environ[key] = value
+
 
 # 启动程序
 def start(processpath):
     print '启动：' + processpath
     file = open(processpath)
     file.close()
+
+
+# 获取外网IP地址
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 
 if __name__ == '__main__':
@@ -242,36 +255,37 @@ if __name__ == '__main__':
         ENV_JAVA_HOME = env
         editFileContent('/etc/profile', CONTENTS_CHANGE + env + '\n' + CONTENTS)
 
-
-    #配置当前进程环境变量
+    # 配置当前进程环境变量
     # configPath('JAVA_HOME',"'"+ENV_JAVA_HOME+"'")
     # configPath('JRE_HOME',ENV_JRE_HOME)
     # configPath('CLASSPATH',ENV_CLASSPATH)
-    configPath('PATH',os.environ.get('PATH')+':'+ENV_JAVA_HOME+'/bin')
-
+    configPath('PATH', os.environ.get('PATH') + ':' + ENV_JAVA_HOME + '/bin')
 
     # tale 的下载和安装
     # 下载tale.zip
-    downFileProcess(TALE_URL,SOFTWARE_PATH)
-    #获取下载的文件名
+    downFileProcess(TALE_URL, SOFTWARE_PATH)
+    # 获取下载的文件名
     taleName = getFilename(TALE_URL)
-    #解压tale.zip
-    taleFolderName = unzip_file(SOFTWARE_PATH+taleName,TALE_HOME)
-    os.chdir(TALE_HOME+taleFolderName)
-    os.chmod('tale-cli',stat.S_IRWXU)
+    # 解压tale.zip
+    taleFolderName = unzip_file(SOFTWARE_PATH + taleName, TALE_HOME)
+    os.chdir(TALE_HOME + taleFolderName)
+    os.chmod('tale-cli', stat.S_IRWXU)
     print '将tale的端口配置为80'
-    if not isContentInFile('resources/app.properties','server.port=80'):
-        editFileContent('resources/app.properties','server.port=80')
+    if not isContentInFile('resources/app.properties', 'server.port=80'):
+        editFileContent('resources/app.properties', 'server.port=80')
     result = execShell("./tale-cli start")
 
-
-
-    #配置防火墙
+    # 配置防火墙
     print '配置防火墙'
     execShell('systemctl stop firewalld.service')
+    print '防火墙配置完成'
 
 
-    print '搭建完成~'
+    #获取外网IP
+    public_ip = get_ip_address("eth0")
+    print("\033[1;32;40m恭喜您，搭建完成，访问: "+public_ip+" 配置博客\033[0m")
+    print("\033[0;31;46m 想了解更多，请访问：www.hellojava.club\033[0m")
 
-    # foldername = tarD('jdk-8u151-linux-x64.tar.gz', getPwd())
-    # print foldername
+
+# foldername = tarD('jdk-8u151-linux-x64.tar.gz', getPwd())
+# print foldername
