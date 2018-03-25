@@ -46,5 +46,5 @@ def get_ip_address(ifname):
 if __name__ == '__main__':
     get_ip()
     print("\033[1;34;47m恭喜您，搭建完成，访问:！\033[0m")
-    print("\033[1;34;47m想了解更多，请访问：www.hellojava.club\033[0m")
+    print("\033[1;34;40m想了解更多，请访问：www.hellojava.club\033[0m")
 

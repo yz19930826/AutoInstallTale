@@ -134,14 +134,12 @@ def tarD(filepath, path):
     if os.path.exists(filepath + names[0]):
         print '文件已解压...'
     else:
-        folderName = ''
-        i = 1;
         for name in names:
             print name
             tar.extract(name, path=path)
             # tar.close()
         print '解压' + filepath + "完成，关闭流~";
-        tar.close()
+    tar.close()
     return names[0]
 
 
