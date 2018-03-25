@@ -282,7 +282,7 @@ if __name__ == '__main__':
     #获取外网IP
     public_ip = get_ip_address("eth0")
     print("\033[1;32;40m恭喜您，搭建完成，访问: "+public_ip+" 配置博客\033[0m")
-    print("\033[0;31;46m 想了解更多，请访问：www.hellojava.club\033[0m")
+    print("\033[0;31;46m 哈喽爪哇，让技术更有价值的传播，请访问：www.hellojava.club\033[0m")
 
 
 # foldername = tarD('jdk-8u151-linux-x64.tar.gz', getPwd())
