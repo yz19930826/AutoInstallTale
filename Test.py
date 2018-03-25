@@ -1,7 +1,9 @@
 # coding:utf-8
 # 测试文件读写
 import os
-
+import socket
+import fcntl
+import struct
 
 
 # 将指定的内容写入文件
@@ -35,8 +37,16 @@ def get_ip():
     out = os.popen("ifconfig | grep 'inet addr:' | grep -v '127.0.0.1' | cut -d: -f2 | awk '{print $1}' | head -1").read()
     print out
 
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 if __name__ == '__main__':
+    print get_ip_address("eth0")
     get_ip()
     print("\033[1;34;47m恭喜您，搭建完成，访问:！\033[0m")
     print("\033[1;34;47m想了解更多，请访问：www.hellojava.club\033[0m")

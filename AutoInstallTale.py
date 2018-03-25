@@ -271,7 +271,7 @@ if __name__ == '__main__':
     execShell('systemctl stop firewalld.service')
 
 
-    print '搭建完成~'
+    print '搭建完成,在浏览器中输入'
 
     # foldername = tarD('jdk-8u151-linux-x64.tar.gz', getPwd())
     # print foldername
