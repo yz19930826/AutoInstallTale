@@ -240,10 +240,10 @@ if __name__ == '__main__':
         editFileContent('/etc/profile', CONTENTS_CHANGE + env + '\n' + CONTENTS)
 
     #配置当前进程环境变量
-    configPath('JAVA_HOME',"'"+ENV_JAVA_HOME+"'")
-    configPath('JRE_HOME',ENV_JRE_HOME)
-    configPath('CLASSPATH',ENV_CLASSPATH)
-    configPath('PATH',ENV_PATH)
+    # configPath('JAVA_HOME',"'"+ENV_JAVA_HOME+"'")
+    # configPath('JRE_HOME',ENV_JRE_HOME)
+    # configPath('CLASSPATH',ENV_CLASSPATH)
+    configPath('PATH',os.environ.get('PATH')+':'+ENV_JAVA_HOME+'/bin')
 
 
     # tale 的下载和安装
