@@ -131,7 +131,7 @@ def tarD(filepath, path):
     print '正在解压' + filepath + "文件，请耐心等待..."
     tar = tarfile.open(filepath)
     names = tar.getnames()
-    if os.path.exists(filepath + names[0]):
+    if os.path.exists(path + names[0]):
         print '文件已解压...'
     else:
         for name in names:
