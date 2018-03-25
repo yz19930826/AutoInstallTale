@@ -30,9 +30,9 @@ export PATH=${JAVA_HOME}/bin:$PATH
 
 #环境变量
 ENV_JAVA_HOME = ''
-ENV_JRE_HOME = '''${JAVA_HOME}/jre'''
-ENV_CLASSPATH='''.:${JAVA_HOME}/lib:${JRE_HOME}/lib'''
-ENV_PATH = '''${JAVA_HOME}/bin:$PATH'''
+ENV_JRE_HOME = '"${JAVA_HOME}/jre"'
+ENV_CLASSPATH='".:${JAVA_HOME}/lib:${JRE_HOME}/lib"'
+ENV_PATH = '"${JAVA_HOME}/bin:$PATH"'
 
 
 
@@ -240,7 +240,7 @@ if __name__ == '__main__':
         editFileContent('/etc/profile', CONTENTS_CHANGE + env + '\n' + CONTENTS)
 
     #配置当前进程环境变量
-    configPath('JAVA_HOME',ENV_JAVA_HOME)
+    configPath('JAVA_HOME',"'"+ENV_JAVA_HOME+"'")
     configPath('JRE_HOME',ENV_JRE_HOME)
     configPath('CLASSPATH',ENV_CLASSPATH)
     configPath('PATH',ENV_PATH)
