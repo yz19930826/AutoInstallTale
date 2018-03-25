@@ -8,7 +8,7 @@ import math
 import zipfile
 
 # JDK下载路径
-JDK_URL = 'http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz'
+JDK_URL = 'http://p1hy9syru.bkt.clouddn.com/jdk-8u151-linux-x64.tar.gz'
 # JAVA_Home地址
 JAVA_HOME = '/usr/local/java/'
 # TALE_HOME
@@ -242,6 +242,7 @@ if __name__ == '__main__':
         ENV_JAVA_HOME = env
         editFileContent('/etc/profile', CONTENTS_CHANGE + env + '\n' + CONTENTS)
 
+
     #配置当前进程环境变量
     # configPath('JAVA_HOME',"'"+ENV_JAVA_HOME+"'")
     # configPath('JRE_HOME',ENV_JRE_HOME)
@@ -250,7 +251,6 @@ if __name__ == '__main__':
 
 
     # tale 的下载和安装
-
     # 下载tale.zip
     downFileProcess(TALE_URL,SOFTWARE_PATH)
     #获取下载的文件名
@@ -263,6 +263,8 @@ if __name__ == '__main__':
     if not isContentInFile('resources/app.properties','server.port=80'):
         editFileContent('resources/app.properties','server.port=80')
     result = execShell("./tale-cli start")
+
+
 
     #配置防火墙
     print '配置防火墙'
